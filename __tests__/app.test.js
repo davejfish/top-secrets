@@ -25,7 +25,14 @@ describe('backend-express-template routes', () => {
       lastName,
       email,
     });
+  });
 
+  it('signs in an existing user', async () => {
+    await request(app).post('/api/v1/users').send(mockUser);
+    const response = await request(app)
+      .post('/api/v1/users/sessions')
+      .send({ email: 'demo@test.com', password: '123456' });
+    expect(response.status).toBe(200);
   });
 
   afterAll(() => {
