@@ -6,7 +6,7 @@ const app = require('../lib/app');
 const mockUser = {
   firstName: 'demo',
   lastName: 'user',
-  email: 'demo@test.example.com',
+  email: 'demo@test.com',
   password: '123456',
 };
 
@@ -25,7 +25,7 @@ describe('backend-express-template routes', () => {
       lastName,
       email,
     });
-    
+
   });
 
   afterAll(() => {
