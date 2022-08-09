@@ -2,12 +2,24 @@ const pool = require('../lib/utils/pool');
 const setup = require('../data/setup');
 const request = require('supertest');
 const app = require('../lib/app');
+const UserService = require('../lib/services/UserService');
 
 const mockUser = {
   firstName: 'demo',
   lastName: 'user',
   email: 'demo@test.com',
   password: '123456',
+};
+
+const registerAndLogin = async (userProps = {}) => {
+  const password = userProps.password ?? mockUser.password;
+  const agent = request(app);
+  const user = await UserService.create({ ...mockUser, ...userProps });
+
+  const { email } = user;
+  await agent.post('/api/v1/users/sessions').send({ email, password });
+
+  return [agent, user];
 };
 
 describe('backend-express-template routes', () => {
@@ -38,6 +50,12 @@ describe('backend-express-template routes', () => {
   it('/protected should return a 401 if not authenticated', async () => {
     const response = await request(app).get('/api/v1/users/protected');
     expect(response.status).toBe(401);
+  });
+
+  it('/protected should return the current user if authenticated', async () => {
+    const [agent] = await registerAndLogin();
+    const response = await agent.get('/api/v1/users/protected');
+    expect(response.status).toBe(200);
   });
 
   afterAll(() => {
