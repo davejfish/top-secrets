@@ -68,6 +68,7 @@ describe('backend-express-template routes', () => {
     const response = await agent.get('/api/v1/users/');
     expect(response.status).toBe(403);
   });
+  
 
   afterAll(() => {
     pool.end();
