@@ -75,8 +75,14 @@ describe('backend-express-template routes', () => {
     expect(response.status).toBe(200);
   });
 
-  it('/secrets should return a list of secrets', async () => {
+  it('/secrets should return 401 if user is not authenticated', async () => {
     const response = await request(app).get('/api/v1/secrets');
+    expect(response.status).toBe(401);
+  });
+
+  it('/secrets should return a list of secrets if user is authenticated', async () => {
+    const [agent] = await registerAndLogin();
+    const response = await agent.get('/api/v1/secrets');
     expect(response.status).toBe(200);
     expect(response.body.length).toEqual(3);
     expect(response.body[0]).toEqual({
