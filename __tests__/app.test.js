@@ -35,6 +35,11 @@ describe('backend-express-template routes', () => {
     expect(response.status).toBe(200);
   });
 
+  it('/protected should return a 401 if not authenticated', async () => {
+    const response = await request(app).get('/api/v1/users/protected');
+    expect(response.status).toBe(401);
+  });
+
   afterAll(() => {
     pool.end();
   });
