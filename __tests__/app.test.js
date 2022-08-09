@@ -75,6 +75,16 @@ describe('backend-express-template routes', () => {
     expect(response.status).toBe(200);
   });
 
+  it('/users should sign out an existing user', async () => {
+    const [agent] = await registerAndLogin();
+    const response = await agent.delete('/api/v1/users');
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual({
+      message: 'Signed out successfully',
+      success: true,
+    });
+  });
+
   it('/secrets should return 401 if user is not authenticated', async () => {
     const response = await request(app).get('/api/v1/secrets');
     expect(response.status).toBe(401);
