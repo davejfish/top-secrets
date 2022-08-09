@@ -75,6 +75,18 @@ describe('backend-express-template routes', () => {
     expect(response.status).toBe(200);
   });
 
+  it('/secrets should return a list of secrets', async () => {
+    const response = await request(app).get('/api/v1/secrets');
+    expect(response.status).toBe(200);
+    expect(response.body.length).toEqual(3);
+    expect(response.body[0]).toEqual({
+      id: expect.any(String),
+      title: expect.any(String),
+      description: expect.any(String),
+      created_at: expect.any(String),
+    });
+  });
+
   afterAll(() => {
     pool.end();
   });
