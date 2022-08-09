@@ -75,7 +75,12 @@ describe('backend-express-template routes', () => {
     expect(response.status).toBe(200);
   });
 
-  it('/users should sign out an existing user', async () => {
+  it('#SIGN OUT /users should return 401 if not signed in', async () => {
+    const response = await request(app).delete('/api/v1/users');
+    expect(response.status).toBe(401);
+  });
+
+  it('#SIGN OUT /users should sign out an existing user', async () => {
     const [agent] = await registerAndLogin();
     const response = await agent.delete('/api/v1/users');
     expect(response.status).toBe(200);
